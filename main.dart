@@ -137,6 +137,16 @@ UnloadBook() {
 UnloadCustomer() {
   File Unload = new File("CustomerRecord.csv");
   Unload.writeAsStringSync("USERNAME,Name,Address,Books");
+  String text = "\n";
+  USERNAME.forEach((e) {
+    text += e + ", " + CustomerDetails[e].Name;
+    text += ", " + CustomerDetails[e].Address + ", ";
+    CustomerDetails[e].BorrowedBooks.forEach((f) {
+      text += f + ";";
+    });
+    Unload.writeAsStringSync(text, mode: FileMode.append);
+    text = "\n";
+  });
 }
 
 var BookDetails = new Map(); //Map for ISBN : Book Object
