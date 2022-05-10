@@ -6,11 +6,11 @@ Example:
 
 inside CSV File:
 ISBN, Title, Author, Genre, Avaialble
-1234, Deep Work, Cal Newport, Computer Science, true
-1235, Atomic Habits, James Clear, Philosophy, true
+1234, Deep Work, Cal Newport, Computer Science, true \n
+1235, Atomic Habits, James Clear, Philosophy, true \n
 
-the plan is to load all of these books into memory 
-upon executing the program
+the plan is to load all of these books into memory \n
+upon executing the program \n
 
 and then during the execution the loaded data will be
 modified depending on the usage of the program
