@@ -6,7 +6,7 @@ Example:
 
 inside CSV File:
 ISBN, Title, Author, Genre, Avaialble
-1234, Deep Work, Cal Newport, Computer Science, true \n
+1234, Deep Work, Cal Newport, Computer Science, true <br>
 1235, Atomic Habits, James Clear, Philosophy, true \n
 
 the plan is to load all of these books into memory \n
