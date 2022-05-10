@@ -50,9 +50,11 @@ class Customer {
   }
 
   display() {
-    stdout.write("Name: " + Name + " Address: " + Address + " Books : ");
+    stdout.write(" Name: " + Name + " Address: " + Address + " Books : ");
     BorrowedBooks.forEach((e) {
-      stdout.write(BookDetails[e].Title + ", ");
+      if (ISBN.contains(e)) {
+        stdout.write(BookDetails[e].Title + ", ");
+      }
     });
     print(" ");
   }
@@ -78,9 +80,7 @@ displayOptions() {
   print('"Art and Recreation"');
 }
 
-Unload() {}
-
-Load() {
+LoadBook() {
   //Here we load the BookRecord CSV file into memory
   final BookRecord = File("BookRecord.csv").readAsLinesSync();
   BookRecord.removeAt(0);
@@ -98,25 +98,45 @@ Load() {
     BookDetails[v[0]] = b;
     bookCount++;
   }
+}
 
+LoadCustomer() {
   //Here we load the the CustomerRecord csv file into Memory
   final CustomerRecord = File("CustomerRecord.csv").readAsLinesSync();
   CustomerRecord.removeAt(0);
-  for (var lines in CustomerRecord) {
-    var V = lines.split(',');
-    USERNAME.add(V[0]);
+  for (var line in CustomerRecord) {
+    var v = line.split(',');
+    USERNAME.add(v[0]);
     Customer c = new Customer();
-    c.Name = V[1];
-    /*c.Name = v[1];
+    c.Name = v[1];
     c.Address = v[2];
-    if (v[3] != '') {
-      String text = v[3];
-      var xxx = text.split(';');
-      c.BorrowedBooks = xxx;
-    }*/
-    CustomerDetails[V[0]] = c;
+    print(v[3].split(';'));
+    c.BorrowedBooks = v[3].split(';');
+    CustomerDetails[v[0]] = c;
     customerCount++;
   }
+}
+
+UnloadBook() {
+  File Unload = new File("BookRecord.csv");
+  Unload.writeAsStringSync("ISBN,Title,Author,Genre,Available");
+  String text = "\n";
+  ISBN.forEach((e) {
+    text += e + ", " + BookDetails[e].Title + ", " + BookDetails[e].Author;
+    text += ", " + BookDetails[e].Genre + ",";
+    if (BookDetails[e].available == true) {
+      text += "true";
+    } else {
+      text += "false";
+    }
+    Unload.writeAsStringSync(text, mode: FileMode.append);
+    text = "\n";
+  });
+}
+
+UnloadCustomer() {
+  File Unload = new File("CustomerRecord.csv");
+  Unload.writeAsStringSync("USERNAME,Name,Address,Books");
 }
 
 var BookDetails = new Map(); //Map for ISBN : Book Object
@@ -129,7 +149,8 @@ List USERNAME =
 int customerCount = 0; //Total Number of Customer
 
 main() {
-  Load();
+  LoadBook();
+  LoadCustomer();
   displayOptions();
   var choice = " ";
 
@@ -210,6 +231,7 @@ main() {
       case 'dispCustomer': // Display All Customer
         {
           for (int a = 0; a < customerCount; a++) {
+            stdout.write("USERNAME: " + USERNAME[a]);
             CustomerDetails[USERNAME[a]].display();
           }
         }
@@ -294,7 +316,8 @@ main() {
 
       case 'exit':
         {
-          Unload();
+          UnloadCustomer();
+          UnloadBook();
         }
         break;
 
