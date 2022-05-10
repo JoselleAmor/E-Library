@@ -78,6 +78,47 @@ displayOptions() {
   print('"Art and Recreation"');
 }
 
+Unload() {}
+
+Load() {
+  //Here we load the BookRecord CSV file into memory
+  final BookRecord = File("BookRecord.csv").readAsLinesSync();
+  BookRecord.removeAt(0);
+  for (var line in BookRecord) {
+    var v = line.split(',');
+    ISBN.add(v[0]);
+    Book b = new Book();
+    b.Title = v[1];
+    b.Author = v[2];
+    b.Genre = v[3];
+    if (v[4] == 'true')
+      b.available = true;
+    else
+      b.available = false;
+    BookDetails[v[0]] = b;
+    bookCount++;
+  }
+
+  //Here we load the the CustomerRecord csv file into Memory
+  final CustomerRecord = File("CustomerRecord.csv").readAsLinesSync();
+  CustomerRecord.removeAt(0);
+  for (var lines in CustomerRecord) {
+    var V = lines.split(',');
+    USERNAME.add(V[0]);
+    Customer c = new Customer();
+    c.Name = V[1];
+    /*c.Name = v[1];
+    c.Address = v[2];
+    if (v[3] != '') {
+      String text = v[3];
+      var xxx = text.split(';');
+      c.BorrowedBooks = xxx;
+    }*/
+    CustomerDetails[V[0]] = c;
+    customerCount++;
+  }
+}
+
 var BookDetails = new Map(); //Map for ISBN : Book Object
 List ISBN = []; //List for ISBN
 int bookCount = 0; //Total Number of Books
@@ -88,6 +129,7 @@ List USERNAME =
 int customerCount = 0; //Total Number of Customer
 
 main() {
+  Load();
   displayOptions();
   var choice = " ";
 
@@ -192,7 +234,7 @@ main() {
             continue;
           }
           //check if book is available
-          if (BookDetails[tempISBN].available == true) {
+          if (BookDetails[tempISBN].available == false) {
             print("Book is not Available");
             continue;
           }
@@ -247,6 +289,12 @@ main() {
                 return - return a book
                 commands - print commands
           """);
+        }
+        break;
+
+      case 'exit':
+        {
+          Unload();
         }
         break;
 
