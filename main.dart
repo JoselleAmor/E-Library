@@ -60,8 +60,18 @@ class Customer {
 
 displayOptions() {
   print("********* E-LIBRARY **********");
-  print("PRESS: ");
-  print("1: Add Book ");
+  print("Command: ");
+  print("""
+                addbook - Add book in E-Library
+                dispAll - Display all books of Library
+                dispBorrowed - Display all books that were Borrowed
+                dispAvailable - Display all books that are Available
+                addCustomer - Add new Customer 
+                dispCutomer - Display customer Details
+                borrow - Borrow a book
+                return - return a book
+                commands - print commands
+          """);
   print("Genres Available: ");
   print('"Computer Science",\t"Philosophy"');
   print('"Pure Science",\t"History"');
@@ -83,10 +93,10 @@ main() {
 
   //Here we repeat the process while not exiting
   do {
-    stdout.write("Enter Choice: ");
+    stdout.write("Enter Command: ");
     choice = stdin.readLineSync()!;
     switch (choice) {
-      case '1': //Add Book Option
+      case 'addBook': //Add Book Option
         {
           var temp = " ";
           stdout.write("Enter ISBN : ");
@@ -105,7 +115,7 @@ main() {
         }
         break;
 
-      case '2': // Display All Available
+      case 'dispAll': // Display All
         {
           print("All Books: ");
           for (int a = 0; a < bookCount; a++) {
@@ -115,7 +125,7 @@ main() {
         }
         break;
 
-      case '3': // Display Not Available
+      case 'dispBorrowed': // Display Not Available
         {
           print("Borrowed Books: ");
           for (int a = 0; a < bookCount; a++) {
@@ -126,7 +136,7 @@ main() {
         }
         break;
 
-      case '4': // Display Available
+      case 'dispAvailable': // Display Available
         {
           print("Available Books");
           for (int a = 0; a < bookCount; a++) {
@@ -137,7 +147,7 @@ main() {
         }
         break;
 
-      case '5': // Add New Customer
+      case 'addCustomer': // Add New Customer
         {
           var temp = " ";
           stdout.write("Enter Username : ");
@@ -155,7 +165,7 @@ main() {
         }
         break;
 
-      case '6': // Display All Customer
+      case 'dispCustomer': // Display All Customer
         {
           for (int a = 0; a < customerCount; a++) {
             CustomerDetails[USERNAME[a]].display();
@@ -163,7 +173,36 @@ main() {
         }
         break;
 
-      case '7': //Borrow Book
+      case 'borrow': //Borrow Book
+        {
+          var tempUname = " ";
+          stdout.write("Enter Username : ");
+          tempUname = stdin.readLineSync()!;
+          //check if  user name exist
+          if (!USERNAME.contains(tempUname)) {
+            print("Username doesn't Exist, add customer or review username");
+            continue;
+          }
+          var tempISBN = " ";
+          stdout.write("Enter ISBN : ");
+          tempISBN = stdin.readLineSync()!;
+          //check if book exist
+          if (!ISBN.contains(tempISBN)) {
+            print("Book doesn't Exist, add book or review ISBN");
+            continue;
+          }
+          //check if book is available
+          if (BookDetails[tempISBN].available == true) {
+            print("Book is not Available");
+            continue;
+          }
+
+          BookDetails[tempISBN].available = false;
+          CustomerDetails[tempUname].BorrowedBooks.add(tempISBN);
+        }
+        break;
+
+      case 'return': //Return Book
         {
           var tempUname = " ";
           stdout.write("Enter Username : ");
@@ -179,14 +218,41 @@ main() {
             print("Book doesn't Exist, add book or review ISBN");
             continue;
           }
+          if (BookDetails[tempISBN].available == true) {
+            print("Book already on library");
+            continue;
+          }
 
-          BookDetails[tempISBN].available = false;
-          CustomerDetails[tempUname].BorrowedBooks.add(tempISBN);
+          BookDetails[tempISBN].available = true;
+          CustomerDetails[tempUname].BorrowedBooks.remove(tempISBN);
+        }
+        break;
+
+      case 'clean':
+        {
+          print("xxx");
+        }
+        break;
+
+      case 'commands':
+        {
+          print("""
+                addbook - Add book in E-Library
+                dispAll - Display all books of Library
+                dispBorrowed - Display all books that were Borrowed
+                dispAvailable - Display all books that are Available
+                addCustomer - Add new Customer 
+                dispCutomer - Display customer Details
+                borrow - Borrow a book
+                return - return a book
+                commands - print commands
+          """);
         }
         break;
 
       default:
+        print("There is no such Command");
         break;
     }
-  } while (choice != '9');
+  } while (choice != 'exit');
 }
