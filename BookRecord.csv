@@ -1,6 +1,7 @@
 ISBN,Title,Author,Genre,Available
-001, Deep Work, Cal NewPort, Philosophy, true
-002, Ego Is The Enemy, Ryan Holiday, History, false
-003, Mindset, Carol Dwek, Philosophy, true
-004, The 7 Habits of Highly Effective People, Stephen S. Covey, Philosophy, true
-005, Cosmos, Carl Sagan, Pure Science, true
+001,         Deep Work,         Cal NewPort,         Philosophy,true
+002,         Ego Is The Enemy,         Ryan Holiday,         History,true
+003,         Mindset,         Carol Dwek,         Philosophy,false
+004,         The 7 Habits of Highly Effective People,         Stephen S. Covey,         Philosophy,true
+005,         Cosmos,         Carl Sagan,         Pure Science,true
+006,     Can't Hurt Me,     David Goggins,     philosophy,true

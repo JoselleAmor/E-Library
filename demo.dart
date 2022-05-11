@@ -8,11 +8,11 @@ class Book {
   bool available = true;
 
   List genre = [
-    "computer science",
-    "philosophy",
-    "pure science",
-    "art and recreation",
-    "history"
+    "Computer Science",
+    "Philosophy",
+    "Pure Science",
+    "Art and Recreation",
+    "History"
   ];
 
   addBook() {
@@ -24,7 +24,6 @@ class Book {
     do {
       stdout.write("Genre: ");
       Genre = stdin.readLineSync()!;
-      Genre = Genre.toLowerCase();
     } while (!genre.contains(Genre));
   }
 
@@ -41,9 +40,9 @@ class Book {
 class Customer {
   String Name = " ";
   String Address = " ";
-  String ISBNbooks = "";
+  String BorrowedBooks = " ";
 
-  addCustomer() {
+  addCutomer() {
     stdout.write("Name : ");
     Name = stdin.readLineSync()!;
     stdout.write("Address :");
@@ -51,20 +50,43 @@ class Customer {
   }
 
   display() {
-    print(" Name: " + Name + " Address: " + Address + " Books : " + ISBNbooks);
-    //tried converting the string ISBN into title
-    /*  if (ISBNbooks.isEmpty) {
-    } else {
-      List b = ISBNbooks.split(' ');
-      b.forEach((element) {
-        stdout.write(BookDetails[element].Title);
-      });
-    }*/
+    stdout.write(" Name: " +
+        Name +
+        " Address: " +
+        Address +
+        " Books : " +
+        BorrowedBooks);
+    /* BorrowedBooks.forEach((e) {
+      if (ISBN.contains(e)) {
+        stdout.write(BookDetails[e].Title + ", ");
+      }
+    });*/
+    print(" ");
   }
 }
 
+displayOptions() {
+  print("********* E-LIBRARY **********");
+  print("Command: ");
+  print("""
+                addbook - Add book in E-Library
+                dispAll - Display all books of Library
+                dispBorrowed - Display all books that were Borrowed
+                dispAvailable - Display all books that are Available
+                addCustomer - Add new Customer 
+                dispCutomer - Display customer Details
+                borrow - Borrow a book
+                return - return a book
+                commands - print commands
+          """);
+  print("Genres Available: ");
+  print('"Computer Science",\t"Philosophy"');
+  print('"Pure Science",\t"History"');
+  print('"Art and Recreation"');
+}
+
 LoadBook() {
-  //Here we load the bookRecord CSV file into memory
+  //Here we load the BookRecord CSV file into memory
   final BookRecord = File("BookRecord.csv").readAsLinesSync();
   BookRecord.removeAt(0);
   for (var line in BookRecord) {
@@ -84,22 +106,18 @@ LoadBook() {
 }
 
 LoadCustomer() {
-  //Here we load the CustomerRecord file into memory
-  final CustomerRecord = File("CustomerREcord.csv").readAsLinesSync();
+  //Here we load the the CustomerRecord csv file into Memory
+  final CustomerRecord = File("CustomerRecord.csv").readAsLinesSync();
   CustomerRecord.removeAt(0);
   for (var line in CustomerRecord) {
     var v = line.split(',');
     USERNAME.add(v[0]);
     Customer c = new Customer();
-    c.Name = v[1];
+    /* c.Name = v[1];
     c.Address = v[2];
-    if (v[3].isEmpty) {
-      c.ISBNbooks = " ";
-    } else {
-      c.ISBNbooks = v[3];
-    }
+    c.BorrowedBooks = v[3];
     CustomerDetails[v[0]] = c;
-    customerCount++;
+    customerCount++;*/
   }
 }
 
@@ -126,27 +144,16 @@ UnloadCustomer() {
   String text = "\n";
   USERNAME.forEach((e) {
     text += e + ", " + CustomerDetails[e].Name;
-    text += ", " + CustomerDetails[e].Address;
-    text += ", " + CustomerDetails[e].ISBNbooks;
+    text += ", " +
+        CustomerDetails[e].Address +
+        ", " +
+        CustomerDetails[e].BorrowedBooks;
+    /* CustomerDetails[e].BorrowedBooks.forEach((f) {
+      text += f + ";";
+    });*/
     Unload.writeAsStringSync(text, mode: FileMode.append);
     text = "\n";
   });
-}
-
-command() {
-  print("""
-                add book - Add book in E-Library
-                display book - Display all books of Library
-                display borrowed - Display all books that were Borrowed
-                display available - Display all books that are Available
-                add Customer - Add new Customer 
-                display Cutomer - Display customer Details
-                borrow - Borrow a book
-                return - return a book
-                commands - print commands
-                book count - display all books, available and borrowed
-                exit - exit E-Library
-          """);
 }
 
 var BookDetails = new Map(); //Map for ISBN : Book Object
@@ -154,23 +161,22 @@ List ISBN = []; //List for ISBN
 int bookCount = 0; //Total Number of Books
 
 var CustomerDetails = new Map(); //Map for customer USERNAME : customerObject
-List USERNAME = []; // List for customer USERNAME,
-//which is unique in every customer
-int customerCount = 0;
+List USERNAME =
+    []; // List for customer USERNAME, which is unique in every customer
+int customerCount = 0; //Total Number of Customer
 
 main() {
-  var choice = " ";
   LoadBook();
   LoadCustomer();
+  displayOptions();
+  var choice = " ";
 
-  print("**********WELCOME TO E-LIBRARY!***************");
-  command();
+  //Here we repeat the process while not exiting
   do {
     stdout.write("Enter Command: ");
     choice = stdin.readLineSync()!;
-    choice.toLowerCase();
     switch (choice) {
-      case 'add book': //Add Book Option
+      case 'addBook': //Add Book Option
         {
           var temp = " ";
           stdout.write("Enter ISBN : ");
@@ -189,7 +195,7 @@ main() {
         }
         break;
 
-      case 'display book': // Display All
+      case 'dispAll': // Display All
         {
           print("All Books: ");
           for (int a = 0; a < bookCount; a++) {
@@ -199,7 +205,7 @@ main() {
         }
         break;
 
-      case 'display borrowed': // Display Not Available
+      case 'dispBorrowed': // Display Not Available
         {
           print("Borrowed Books: ");
           for (int a = 0; a < bookCount; a++) {
@@ -210,7 +216,7 @@ main() {
         }
         break;
 
-      case 'display available': // Display Available
+      case 'dispAvailable': // Display Available
         {
           print("Available Books");
           for (int a = 0; a < bookCount; a++) {
@@ -221,7 +227,7 @@ main() {
         }
         break;
 
-      case 'add customer':
+      case 'addCustomer': // Add New Customer
         {
           var temp = " ";
           stdout.write("Enter Username : ");
@@ -231,7 +237,7 @@ main() {
           } else {
             USERNAME.add(temp);
             Customer c = new Customer();
-            c.addCustomer();
+            c.addCutomer();
             CustomerDetails[temp] = c;
             customerCount++;
             print("$temp Added");
@@ -239,7 +245,7 @@ main() {
         }
         break;
 
-      case 'display customer': // Display All Customer
+      case 'dispCustomer': // Display All Customer
         {
           for (int a = 0; a < customerCount; a++) {
             stdout.write("USERNAME: " + USERNAME[a]);
@@ -248,7 +254,7 @@ main() {
         }
         break;
 
-      case 'borrow':
+      case 'borrow': //Borrow Book
         {
           var tempUname = " ";
           stdout.write("Enter Username : ");
@@ -271,12 +277,14 @@ main() {
             print("Book is not Available");
             continue;
           }
+
           BookDetails[tempISBN].available = false;
-          CustomerDetails[tempUname].ISBNbooks += tempISBN + " ";
+          CustomerDetails[tempUname].BorrowedBooks += tempISBN + " ";
+          //  CustomerDetails[tempUname].BorrowedBooks.add(tempISBN);
         }
         break;
 
-      case 'return':
+      case 'return': //Return Book
         {
           var tempUname = " ";
           stdout.write("Enter Username : ");
@@ -296,36 +304,45 @@ main() {
             print("Book already on library");
             continue;
           }
+
           BookDetails[tempISBN].available = true;
-          var str = CustomerDetails[tempUname]
-              .ISBNbooks
-              .replaceAll(tempISBN + " ", "");
-          CustomerDetails[tempUname].ISBNbooks = str;
+          var str = tempISBN + " ";
+          CustomerDetails[tempUname].BorrowedBooks.replaceAll(str, '');
+        }
+        break;
+
+      case 'clean':
+        {
+          print("xxx");
         }
         break;
 
       case 'commands':
         {
-          command();
+          print("""
+                addbook - Add book in E-Library
+                dispAll - Display all books of Library
+                dispBorrowed - Display all books that were Borrowed
+                dispAvailable - Display all books that are Available
+                addCustomer - Add new Customer 
+                dispCutomer - Display customer Details
+                borrow - Borrow a book
+                return - return a book
+                commands - print commands
+          """);
         }
         break;
 
-      case 'book count':
+      case 'exit':
         {
-          print("All books : $bookCount");
-          int av = 0;
-          for (int a = 0; a < bookCount; a++) {
-            if (BookDetails[ISBN[a]].available == true) {
-              av++;
-            }
-          }
-          print("Available Books: $av");
-          print("Borrowed Books : " + (bookCount - av).toString());
+          UnloadCustomer();
+          UnloadBook();
         }
+        break;
+
+      default:
+        print("There is no such Command");
         break;
     }
-  } while (choice != "exit");
-
-  UnloadBook();
-  UnloadCustomer();
-} //main
+  } while (choice != 'exit');
+}
