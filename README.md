@@ -18,3 +18,22 @@ modified depending on the usage of the program<br>
 Before the program is exited, we will unload the data  <br>
 into the file so that we can access it again later
 
+main.dart contains my code
+I have 2 csv files which contains book and customer data
+
+These are the commands in my program:
+
+                add book - Add book in E-Library
+                display book - Display all books of Library
+                display borrowed - Display all books that were Borrowed
+                display available - Display all books that are Available
+                add Customer - Add new Customer 
+                display Cutomer - Display customer Details
+                borrow - Borrow a book
+                return - return a book
+                commands - print commands
+                book count - display all books, available and borrowed
+                exit - exit E-Library
+  
+ 
+
